@@ -3,146 +3,445 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waves.sh</title>
-    <!-- Add Font Awesome CDN -->
+    <title>labs.waves.sh - AI-Powered Custom Bio Pages</title>
+    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
             --background-color: #000000;
-            --text-color: #e0e0e0;
-            --link-hover-bg: #2a2a2a; /* Color for the wipe effect */
-            --icon-color: #ffffff; /* Color for the icons */
-            --border-radius: 8px;
-            --wipe-speed: 0.35s; /* Speed of the background wipe */
+            --background-section-alt: #080808; /* Even subtler difference */
+            --text-color: #f5f5f7; /* Slightly off-white, common Apple text color */
+            --secondary-text-color: #a1a1a6; /* Apple's secondary grey */
+            --accent-color: #007aff; /* Apple's standard blue */
+            --link-hover-bg: #1c1c1e; /* Dark grey for subtle hover */
+            --icon-color: var(--text-color);
+            --border-color: #2c2c2e; /* Softer border color */
+            --border-radius: 12px; /* Slightly larger, more Apple-like radius */
+            --soft-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Softer, darker shadow */
+            --animation-duration: 0.7s; /* Slightly longer for smoothness */
+            --transition-speed: 0.3s;
+            --animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1); /* Ease-out curve */
+            --animation-delay-step: 0.12s;
+            --font-weight-normal: 400;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            --line-height-normal: 1.7; /* Increased line height */
         }
 
-        html, body {
-            height: 100%;
-            margin: 0;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--background-color);
             color: var(--text-color);
-            display: flex;
-            justify-content: center; /* Center horizontally */
-            align-items: center; /* Center vertically */
-            padding: 20px;
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            min-height: 100vh;
+            overflow-x: hidden;
+            font-weight: var(--font-weight-normal);
         }
 
         .container {
-            max-width: 680px; /* Slightly wider for potentially longer text */
-            width: 100%;
-            text-align: center;
-            padding: 20px 0;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 25px; /* Slightly more horizontal padding */
         }
 
-        .cta-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        section {
+            padding: 90px 0; /* More vertical padding */
+            overflow: hidden;
         }
 
-        .cta-item a {
+        #hero, #features, #process, #cta {
+             background-color: var(--background-color);
+        }
+        #advantage, footer { /* Removed #showcase */
+             background-color: var(--background-section-alt);
+        }
+        footer {
+             border-top: 1px solid var(--border-color);
+             margin-top: 0;
+             padding: 50px 0; /* More padding in footer */
+        }
+
+
+        h1, h2, h3 {
+            color: var(--text-color);
+            margin-bottom: 0.6em; /* Adjust spacing */
+        }
+        h1 { font-size: 3.8em; font-weight: var(--font-weight-bold); letter-spacing: -0.01em;}
+        h2 { font-size: 2.5em; font-weight: var(--font-weight-semibold); text-align: center; margin-bottom: 1.2em;}
+        h3 { font-size: 1.4em; font-weight: var(--font-weight-semibold); }
+
+        p {
+            color: var(--secondary-text-color);
+            line-height: var(--line-height-normal);
+            font-size: 1.08em; /* Slightly larger body text */
+            margin-bottom: 1.2em;
+            font-weight: var(--font-weight-normal);
+        }
+        #advantage .container p, #cta .container p {
+             max-width: 700px;
+             margin-left: auto;
+             margin-right: auto;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease;
+        }
+        a:hover {
+            /* color: color-mix(in srgb, var(--accent-color) 80%, white); */ /* Subtle hover brighten */
+             filter: brightness(1.2);
+        }
+
+        /* --- Animation Keyframes --- */
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(25px); } /* Less distance */
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn { /* Simple Fade */
+             from { opacity: 0; }
+             to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+             from { opacity: 0; transform: scale(0.98); } /* Subtle scale */
+             to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Base Animation Application */
+        .animated-section > *, .animated-on-scroll {
+             opacity: 0;
+             /* Apply base animation, can be overridden */
+             animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) forwards;
+        }
+        /* Stagger children animation */
+        .animated-section > *:nth-child(1) { animation-delay: calc(var(--animation-delay-step) * 0); }
+        .animated-section > *:nth-child(2) { animation-delay: calc(var(--animation-delay-step) * 1); }
+        .animated-section > *:nth-child(3) { animation-delay: calc(var(--animation-delay-step) * 2); }
+        .animated-section > *:nth-child(4) { animation-delay: calc(var(--animation-delay-step) * 3); }
+
+
+        /* --- Button Style --- */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to bottom, var(--accent-color), color-mix(in srgb, var(--accent-color) 92%, black)); /* Subtle gradient */
+            color: #ffffff; /* Pure white text on button */
+            padding: 14px 30px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: var(--font-weight-semibold);
+            transition: transform var(--transition-speed) var(--animation-timing-function),
+                        background var(--transition-speed) var(--animation-timing-function),
+                        box-shadow var(--transition-speed) var(--animation-timing-function);
+            border: none; /* Remove border */
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .btn:hover {
+            /* Slightly lighter gradient on hover */
+            background: linear-gradient(to bottom, color-mix(in srgb, var(--accent-color) 95%, white), color-mix(in srgb, var(--accent-color) 88%, black));
+            transform: translateY(-2px); /* Subtle lift */
+            box-shadow: var(--soft-shadow);
+            color: #ffffff; /* Ensure text remains white */
+             filter: initial; /* Override general link hover brightness */
+        }
+        .btn i { margin-left: 8px; font-size: 0.9em; }
+
+
+        /* --- Hero Section --- */
+        #hero {
+            min-height: 85vh; /* Adjusted height */
             display: flex;
             align-items: center;
-            background-color: transparent;
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 20px 25px;
-            border: 1px solid #333;
-            border-radius: var(--border-radius);
-            text-align: left;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            transition: color 0.3s ease-in-out;
-        }
-
-        /* Background Wipe Pseudo-Element */
-        .cta-item a::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--link-hover-bg);
-            transform: scaleX(0);
-            transform-origin: left center;
-            transition: transform var(--wipe-speed) ease-in-out;
-            z-index: -1;
-            border-radius: inherit;
-        }
-
-        .cta-item a:hover::before {
-            transform: scaleX(1);
-        }
-
-        /* Icon Styling */
-        .cta-icon {
-            color: var(--icon-color);
-            font-size: 1.875em; /* Increased size by 25% (1.5 * 1.25) */
-            margin-right: 20px;
-            flex-shrink: 0;
-            width: 1.875em; /* Updated width to match new font-size */
             text-align: center;
-            z-index: 2;
-            position: relative;
+             /* Removed background image for cleaner look, can be added back */
+             /* background: linear-gradient(180deg, rgba(0,0,0,0.85), var(--background-color)), url('/api/placeholder/1400/900') center center/cover no-repeat;
+             background-blend-mode: darken; */
+        }
+        #hero .container { max-width: 800px; }
+        #hero h1 {
+            opacity: 0;
+            animation: fadeInSlideUp 0.8s var(--animation-timing-function) 0.1s forwards;
+        }
+        #hero p {
+            font-size: 1.3em;
+            max-width: 600px;
+            margin: 0 auto 2em auto; /* More space below paragraph */
+             opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) 0.3s forwards;
+        }
+        #hero .btn {
+             opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) 0.5s forwards;
         }
 
-        /* Text Container */
-        .cta-text-content {
-            flex-grow: 1;
-            z-index: 2;
-            position: relative;
+
+        /* --- Features Section --- */
+        #features h2 { animation-delay: calc(var(--animation-delay-step) * 0); }
+        #features .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* Adjust minmax */
+            gap: 35px; /* More gap */
+            margin-top: 60px; /* More space above grid */
         }
+        .feature-item {
+            background-color: var(--background-section-alt);
+            padding: 35px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) forwards;
+            transition: transform var(--transition-speed) var(--animation-timing-function),
+                        box-shadow var(--transition-speed) var(--animation-timing-function);
+        }
+         .feature-item:hover {
+             transform: translateY(-5px); /* Subtle lift */
+             box-shadow: var(--soft-shadow);
+         }
+        .feature-item i {
+            font-size: 2.5em;
+            color: var(--accent-color);
+            margin-bottom: 25px; /* More space below icon */
+            display: block;
+            transition: transform var(--transition-speed) var(--animation-timing-function);
+        }
+         .feature-item:hover i {
+             transform: scale(1.05); /* Subtle scale on hover */
+         }
+        /* Stagger feature items */
+        #features .feature-item:nth-child(1) { animation-delay: calc(var(--animation-delay-step) * 1); }
+        #features .feature-item:nth-child(2) { animation-delay: calc(var(--animation-delay-step) * 2); }
+        #features .feature-item:nth-child(3) { animation-delay: calc(var(--animation-delay-step) * 3); }
+        #features .feature-item:nth-child(4) { animation-delay: calc(var(--animation-delay-step) * 4); }
 
 
-        .cta-title {
-            font-size: 1.2em;
-            font-weight: 600;
-            margin-bottom: 8px;
+        /* --- Advantage Section --- */
+        #advantage { text-align: center; }
+        #advantage .icon-advantage {
+            font-size: 3.2em;
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            opacity: 0;
+             animation: scaleIn var(--animation-duration) var(--animation-timing-function) 0.1s forwards; /* Scale in icon */
+        }
+        #advantage h2 { animation-delay: calc(var(--animation-delay-step) * 1); }
+        #advantage p { animation-delay: calc(var(--animation-delay-step) * 2); }
+
+
+        /* --- Process Section --- */
+         #process h2 { animation-delay: calc(var(--animation-delay-step) * 0); }
+        #process .process-steps {
+            display: grid; /* Using grid for potentially better alignment */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        .step {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) forwards;
+            background-color: var(--background-section-alt);
+            padding: 30px 25px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            transition: transform var(--transition-speed) var(--animation-timing-function),
+                        box-shadow var(--transition-speed) var(--animation-timing-function);
+        }
+        .step:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--soft-shadow);
+        }
+        .step-number {
+            font-size: 1.2em; /* Smaller number */
+            font-weight: var(--font-weight-semibold);
+            color: var(--secondary-text-color); /* Grey number */
+            /* border: 1px solid var(--border-color); */
+            /* border-radius: 50%; */
+            /* width: 40px; */
+            /* height: 40px; */
+            /* line-height: 40px; */
+            margin: 0 auto 15px auto;
+            display: block;
+            transition: color var(--transition-speed) ease;
+        }
+         /* .step:hover .step-number { */
+             /* color: var(--accent-color); */
+             /* border-color: var(--accent-color); */
+         /* } */
+         .step h3 {
+            font-size: 1.25em;
+            margin-bottom: 10px;
+         }
+         .step p { font-size: 0.95em; line-height: 1.6;} /* Smaller step description */
+        /* Stagger steps */
+        #process .step:nth-child(1) { animation-delay: calc(var(--animation-delay-step) * 2); }
+        #process .step:nth-child(2) { animation-delay: calc(var(--animation-delay-step) * 3); }
+        #process .step:nth-child(3) { animation-delay: calc(var(--animation-delay-step) * 4); }
+        #process .step:nth-child(4) { animation-delay: calc(var(--animation-delay-step) * 5); }
+
+
+        /* --- CTA Section --- */
+        #cta { text-align: center; }
+        #cta h2 { animation-delay: calc(var(--animation-delay-step) * 0); }
+        #cta p { animation-delay: calc(var(--animation-delay-step) * 1); }
+        #cta .btn { animation-delay: calc(var(--animation-delay-step) * 2); }
+
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            color: var(--secondary-text-color);
+            font-size: 0.9em;
         }
 
-        .cta-description {
-            font-size: 0.95em;
-            color: #a0a0a0;
-            line-height: 1.5;
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+             #features .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+             }
+             h1 { font-size: 3.2em; }
+             h2 { font-size: 2.2em; }
         }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2em; }
+            section { padding: 70px 0; }
+            .features-grid, #process .process-steps { /* Removed showcase-grid */
+                grid-template-columns: 1fr; /* Stack everything */
+                gap: 25px;
+            }
+             p { font-size: 1.05em;}
+             #hero p { font-size: 1.2em; }
+        }
+         @media (max-width: 576px) {
+             h1 { font-size: 2.4em; }
+             h2 { font-size: 1.8em; }
+             .btn { padding: 12px 25px; font-size: 0.95em;}
+             .container { padding: 0 15px;}
+         }
 
     </style>
 </head>
 <body>
-    <div class="container">
-        <main>
-            <ul class="cta-list">
-                <li class="cta-item">
-                    <a href="https://vjh.io" target="_blank" rel="noopener noreferrer">
-                        <i class="fa-regular fa-circle-user cta-icon"></i>
-                        <div class="cta-text-content">
-                            <div class="cta-title">Waves.sh makes slick as f*ck bio pages for you socials.</div>
-                            <div class="cta-description">We keep things simple, with no BS branding and simple pricing. Get your page for free today!</div>
-                        </div>
-                    </a>
-                </li>
-                <li class="cta-item">
-                    <a href="https://ig.me/m/vincenthopf" target="_blank" rel="noopener noreferrer">
-                        <i class="fa-solid fa-link cta-icon"></i>
-                        <div class="cta-text-content">
-                            <div class="cta-title">Want a Bio Page?</div>
-                            <div class="cta-description">Want one of our bio pages? click here to contact us to request one!</div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </main>
-    </div>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container animated-section"> <!-- Using animated-section for stagger -->
+            <h1>Your Links, Reimagined.</h1>
+            <p>labs.waves.sh creates remarkably fast, deeply personalized bio pages using intelligent design tools. Experience the new standard.</p>
+            <a href="#cta" class="btn">Get Started <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+             <h2 class="animated-on-scroll">Designed for Impact</h2>
+            <div class="features-grid">
+                <div class="feature-item animated-on-scroll">
+                    <i class="fas fa-palette"></i>
+                    <h3>Unparalleled Customization</h3>
+                    <p>Every detail crafted to your specification. From typography to interactions, achieve your perfect digital presence.</p>
+                </div>
+                <div class="feature-item animated-on-scroll">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Fluid Performance</h3>
+                    <p>Built for speed and responsiveness. Delight users with a seamless experience free from lag or clutter.</p>
+                </div>
+                 <div class="feature-item animated-on-scroll">
+                    <i class="fas fa-feather-alt"></i>
+                    <h3>Clean & Focused</h3>
+                    <p>Your content takes center stage. Minimal branding ensures the spotlight remains on what matters most.</p>
+                </div>
+                <div class="feature-item animated-on-scroll">
+                    <i class="fas fa-sync-alt"></i> <!-- Changed icon -->
+                    <h3>Intelligent Collaboration</h3>
+                    <p>Leverage AI-assisted design combined with personal consultation for a uniquely efficient creation process.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantage Section (AI Explanation) -->
+    <section id="advantage">
+        <div class="container animated-section">
+             <i class="fas fa-magic icon-advantage"></i> <!-- Changed icon -->
+             <h2>The Magic Behind the Page</h2>
+             <p>How do we combine bespoke quality with surprising efficiency? We utilize advanced AI to accelerate design and development, translating complex ideas into polished reality faster than ever. This innovation means premium results without the premium timeline or cost.</p>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process">
+        <div class="container">
+             <h2 class="animated-on-scroll">Simple Path to Custom</h2>
+            <div class="process-steps">
+                <div class="step animated-on-scroll">
+                    <span class="step-number">Step 1</span>
+                    <h3>Connect</h3>
+                    <p>Initiate the process by reaching out with your ideas.</p>
+                </div>
+                <div class="step animated-on-scroll">
+                    <span class="step-number">Step 2</span>
+                    <h3>Collaborate</h3>
+                    <p>Define the vision, style, and features for your page.</p>
+                </div>
+                <div class="step animated-on-scroll">
+                    <span class="step-number">Step 3</span>
+                    <h3>Create</h3>
+                    <p>Watch as we build your page with AI-powered precision.</p>
+                </div>
+                 <div class="step animated-on-scroll">
+                    <span class="step-number">Step 4</span>
+                    <h3>Launch</h3>
+                    <p>Deploy your optimized, high-performance bio page.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta">
+        <div class="container animated-section">
+            <h2>Ready for a Smarter Link Page?</h2>
+            <p>Elevate your online presence with a bio page that's as intelligent as it is beautiful. Contact labs.waves.sh to begin your project today.</p>
+            <a href="https://ig.me/m/vincenthopf" target="_blank" rel="noopener noreferrer" class="btn">Start Your Project <i class="fa-solid fa-paper-plane"></i></a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 labs.waves.sh | Intelligently Designed</p>
+        </div>
+    </footer>
+
+    <script>
+        // Simple Intersection Observer for fade-in animations
+        const animatedElements = document.querySelectorAll('.animated-on-scroll');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.animationPlayState = 'running'; // Ensure animation runs if paused
+                    observer.unobserve(entry.target); // Optional: Stop observing once animated
+                }
+            });
+        }, {
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+
+        animatedElements.forEach(el => {
+             // Ensure animation is paused initially if using play state control
+             // el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+    </script>
+
 </body>
 </html>
