@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>labs.waves.sh - AI-Powered Custom Bio Pages & Pricing</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --background-color: #000000;
+            --background-section-alt: #080808;
+            --text-color: #f5f5f7;
+            --secondary-text-color: #a1a1a6;
+            --accent-color: #007aff;
+            --link-hover-bg: #1c1c1e;
+            --icon-color: var(--text-color);
+            --border-color: #2c2c2e;
+            --border-radius: 12px;
+            --soft-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            --animation-duration: 0.7s;
+            --transition-speed: 0.3s;
+            --animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+            --animation-delay-step: 0.12s;
+            --font-weight-normal: 400;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            --line-height-normal: 1.7;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            font-weight: var(--font-weight-normal);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 25px;
+        }
+
+        section {
+            padding: 90px 0;
+            overflow: hidden;
+        }
+
+        #hero, #features, #process, #cta {
+             background-color: var(--background-color);
+        }
+        #advantage, #showcase, #pricing, footer { /* Added pricing to alt background */
+             background-color: var(--background-section-alt);
+        }
+        footer {
+             border-top: 1px solid var(--border-color);
+             margin-top: 0;
+             padding: 50px 0;
+        }
+
+
+        h1, h2, h3 {
+            color: var(--text-color);
+            margin-bottom: 0.6em;
+        }
+        h1 { font-size: 3.8em; font-weight: var(--font-weight-bold); letter-spacing: -0.01em;}
+        h2 { font-size: 2.5em; font-weight: var(--font-weight-semibold); text-align: center; margin-bottom: 1.2em;}
+        h3 { font-size: 1.4em; font-weight: var(--font-weight-semibold); }
+
+        p {
+            color: var(--secondary-text-color);
+            line-height: var(--line-height-normal);
+            font-size: 1.08em;
+            margin-bottom: 1.2em;
+            font-weight: var(--font-weight-normal);
+        }
+        #advantage .container p, #cta .container p, #pricing .container > p { /* Centering intro paragraphs */
+             max-width: 700px;
+             margin-left: auto;
+             margin-right: auto;
+             text-align: center;
+        }
+
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease;
+        }
+        a:hover {
+             filter: brightness(1.2);
+        }
+
+        /* --- Animation Keyframes --- */
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+             from { opacity: 0; }
+             to { opacity: 1; }
+        }
+        @keyframes scaleIn {
+             from { opacity: 0; transform: scale(0.98); }
+             to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Base Animation Application */
+        .animated-section > *, .animated-on-scroll {
+             opacity: 0;
+             animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) forwards;
+        }
+        /* Stagger children animation */
+        .animated-section > *:nth-child(1) { animation-delay: calc(var(--animation-delay-step) * 0); }
+        .animated-section > *:nth-child(2) { animation-delay: calc(var(--animation-delay-step) * 1); }
+        .animated-section > *:nth-child(3) { animation-delay: calc(var(--animation-delay-step) * 2); }
+        .animated-section > *:nth-child(4) { animation-delay: calc(var(--animation-delay-step) * 3); }
+
+
+        /* --- Button Style --- */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to bottom, var(--accent-color), color-mix(in srgb, var(--accent-color) 92%, black));
+            color: #ffffff;
+            padding: 14px 30px;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            font-weight: var(--font-weight-semibold);
+            transition: transform var(--transition-speed) var(--animation-timing-function),
+                        background var(--transition-speed) var(--animation-timing-function),
+                        box-shadow var(--transition-speed) var(--animation-timing-function);
+            border: none;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center; /* Ensure text centers if button becomes block */
+        }
+        .btn:hover {
+            background: linear-gradient(to bottom, color-mix(in srgb, var(--accent-color) 95%, white), color-mix(in srgb, var(--accent-color) 88%, black));
+            transform: translateY(-2px);
+            box-shadow: var(--soft-shadow);
+            color: #ffffff;
+             filter: initial;
+        }
+        .btn i { margin-left: 8px; font-size: 0.9em; }
+
+
+        /* --- Hero Section --- */
+        #hero {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        #hero .container { max-width: 800px; }
+        #hero h1 {
+            opacity: 0;
+            animation: fadeInSlideUp 0.8s var(--animation-timing-function) 0.1s forwards;
+        }
+        #hero p {
+            font-size: 1.3em;
+            max-width: 600px;
+            margin: 0 auto 2em auto;
+             opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) 0.3s forwards;
+        }
+        #hero .btn {
+             opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) 0.5s forwards;
+        }
+
+
+        /* --- Features Section --- */
+        #features h2 { animation-delay: calc(var(--animation-delay-step) * 0); }
+        #features .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 35px;
+            margin-top: 60px;
+        }
+        .feature-item {
+            background-color: var(--background-section-alt);
+            padding: 35px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) forwards;
+            transition: transform var(--transition-speed) var(--animation-timing-function),
+                        box-shadow var(--transition-speed) var(--animation-timing-function);
+        }
+         .feature-item:hover {
+             transform: translateY(-5px);
+             box-shadow: var(--soft-shadow);
+         }
+        .feature-item i {
+            font-size: 2.5em;
+            color: var(--accent-color);
+            margin-bottom: 25px;
+            display: block;
+            transition: transform var(--transition-speed) var(--animation-timing-function);
+        }
+         .feature-item:hover i {
+             transform: scale(1.05);
+         }
+        #features .feature-item:nth-child(1) { animation-delay: calc(var(--animation-delay-step) * 1); }
+        #features .feature-item:nth-child(2) { animation-delay: calc(var(--animation-delay-step) * 2); }
+        #features .feature-item:nth-child(3) { animation-delay: calc(var(--animation-delay-step) * 3); }
+        #features .feature-item:nth-child(4) { animation-delay: calc(var(--animation-delay-step) * 4); }
+
+
+        /* --- Advantage Section --- */
+        #advantage { text-align: center; }
+        #advantage .icon-advantage {
+            font-size: 3.2em;
+            color: var(--accent-color);
+            margin-bottom: 30px;
+            opacity: 0;
+             animation: scaleIn var(--animation-duration) var(--animation-timing-function) 0.1s forwards;
+        }
+        #advantage h2 { animation-delay: calc(var(--animation-delay-step) * 1); }
+        #advantage p { animation-delay: calc(var(--animation-delay-step) * 2); }
+
+
+        /* --- Process Section --- */
+         #process h2 { animation-delay: calc(var(--animation-delay-step) * 0); }
+        #process .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+        .step {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) forwards;
+            background-color: var(--background-color); /* Switched background */
+            padding: 30px 25px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            transition: transform var(--transition-speed) var(--animation-timing-function),
+                        box-shadow var(--transition-speed) var(--animation-timing-function);
+             display: flex; /* Use flexbox for alignment */
+             flex-direction: column;
+        }
+        .step:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--soft-shadow);
+        }
+        .step-number {
+            font-size: 1.1em;
+            font-weight: var(--font-weight-semibold);
+            color: var(--secondary-text-color);
+            margin: 0 auto 15px auto;
+            display: block;
+        }
+         .step h3 {
+            font-size: 1.25em;
+            margin-bottom: 10px;
+         }
+         .step p { font-size: 0.95em; line-height: 1.6; margin-bottom: 0;} /* Remove bottom margin on step p */
+        #process .step:nth-child(1) { animation-delay: calc(var(--animation-delay-step) * 2); }
+        #process .step:nth-child(2) { animation-delay: calc(var(--animation-delay-step) * 3); }
+        #process .step:nth-child(3) { animation-delay: calc(var(--animation-delay-step) * 4); }
+        #process .step:nth-child(4) { animation-delay: calc(var(--animation-delay-step) * 5); }
+
+
+        /* --- Showcase Section --- */
+        #showcase h2 { animation-delay: calc(var(--animation-delay-step) * 0); }
+        #showcase p { animation-delay: calc(var(--animation-delay-step) * 1); margin-bottom: 60px;}
+        #showcase .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        .showcase-item {
+             border: 1px solid var(--border-color);
+             border-radius: var(--border-radius);
+             overflow: hidden;
+             opacity: 0;
+             animation: fadeIn var(--animation-duration) var(--animation-timing-function) forwards;
+             transition: transform var(--transition-speed) var(--animation-timing-function), box-shadow var(--transition-speed) var(--animation-timing-function);
+             background-color: var(--background-color);
+        }
+        .showcase-item:hover {
+            transform: scale(1.03);
+            box-shadow: var(--soft-shadow);
+        }
+        .showcase-item img {
+            display: block;
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+        #showcase .showcase-item:nth-child(1) { animation-delay: calc(var(--animation-delay-step) * 2); }
+        #showcase .showcase-item:nth-child(2) { animation-delay: calc(var(--animation-delay-step) * 3); }
+
+        /* --- Pricing Section (NEW) --- */
+        #pricing h2 { animation-delay: calc(var(--animation-delay-step) * 0); }
+        #pricing > p { animation-delay: calc(var(--animation-delay-step) * 1); margin-bottom: 60px; } /* Target direct child p */
+        .pricing-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+             gap: 35px;
+             max-width: 800px; /* Limit width for 2 cards */
+             margin: 0 auto; /* Center the grid */
+        }
+        .plan-card {
+            background-color: var(--background-color); /* Contrast with section bg */
+            padding: 40px;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            animation: fadeInSlideUp var(--animation-duration) var(--animation-timing-function) forwards;
+            transition: transform var(--transition-speed) var(--animation-timing-function),
+                        box-shadow var(--transition-speed) var(--animation-timing-function);
+            display: flex;
+            flex-direction: column; /* Ensure button aligns bottom */
+            position: relative; /* For potential badges */
+        }
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--soft-shadow);
+        }
+        .plan-card h3 {
+            font-size: 1.6em;
+            margin-bottom: 0.4em;
+            text-align: center;
+        }
+        .plan-card .price {
+            font-size: 2.8em;
+            font-weight: var(--font-weight-bold);
+            margin-bottom: 0.1em;
+            text-align: center;
+        }
+         .plan-card .price span {
+             font-size: 0.4em; /* Smaller text for /year */
+             font-weight: var(--font-weight-normal);
+             color: var(--secondary-text-color);
+         }
+         .plan-card .tagline {
+             font-size: 0.95em;
+             color: var(--secondary-text-color);
+             text-align: center;
+             margin-bottom: 30px;
+             min-height: 3em; /* Reserve space */
+         }
+        .plan-card .features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 35px 0; /* Space before button */
+            flex-grow: 1; /* Push button down */
+        }
+        .plan-card .features li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start; /* Align icon with first line */
+            font-size: 1em;
+        }
+        .plan-card .features li i {
+            color: var(--accent-color);
+            margin-right: 12px;
+            font-size: 1.1em;
+            margin-top: 0.1em; /* Adjust vertical alignment */
+            flex-shrink: 0; /* Prevent icon shrinking */
+        }
+        .plan-card .btn {
+            width: 100%; /* Make button full width */
+            margin-top: auto; /* Align to bottom */
+        }
+
+        /* Subtle highlight for Pro plan */
+        .plan-pro {
+             border-top: 3px solid var(--accent-color);
+             padding-top: calc(40px - 3px); /* Adjust padding to account for border */
+        }
+        /* Stagger plan cards */
+        #pricing .plan-card:nth-child(1) { animation-delay: calc(var(--animation-delay-step) * 2); }
+        #pricing .plan-card:nth-child(2) { animation-delay: calc(var(--animation-delay-step) * 3); }
+
+        /* --- CTA Section --- */
+        #cta { text-align: center; }
+        #cta h2 { animation-delay: calc(var(--animation-delay-step) * 0); }
+        #cta p { animation-delay: calc(var(--animation-delay-step) * 1); }
+        #cta .btn { animation-delay: calc(var(--animation-delay-step) * 2); }
+
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            color: var(--secondary-text-color);
+            font-size: 0.9em;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+             #features .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+             }
+             h1 { font-size: 3.2em; }
+             h2 { font-size: 2.2em; }
+             .pricing-grid { max-width: none; } /* Allow grid to wrap normally */
+        }
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8em; }
+            h2 { font-size: 2em; }
+            section { padding: 70px 0; }
+            .features-grid, .showcase-grid, #process .process-steps, .pricing-grid {
+                grid-template-columns: 1fr; /* Stack everything */
+                gap: 30px;
+            }
+             p { font-size: 1.05em;}
+             #hero p { font-size: 1.2em; }
+        }
+         @media (max-width: 576px) {
+             h1 { font-size: 2.4em; }
+             h2 { font-size: 1.8em; }
+             .btn { padding: 12px 25px; font-size: 0.95em;}
+             .container { padding: 0 15px;}
+             .plan-card { padding: 30px;}
+             .plan-card .price { font-size: 2.4em;}
+         }
+
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section id="hero">
+        <div class="container animated-section">
+            <h1>Your Links, Reimagined.</h1>
+            <p>labs.waves.sh creates remarkably fast, deeply personalized bio pages using intelligent design tools. Experience the new standard.</p>
+            <a href="#pricing" class="btn">View Plans <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+             <h2 class="animated-on-scroll">Designed for Impact</h2>
+            <div class="features-grid">
+                <div class="feature-item animated-on-scroll">
+                    <i class="fas fa-palette"></i>
+                    <h3>Unparalleled Customization</h3>
+                    <p>Every detail crafted to your specification. From typography to interactions, achieve your perfect digital presence.</p>
+                </div>
+                <div class="feature-item animated-on-scroll">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Fluid Performance</h3>
+                    <p>Built for speed and responsiveness. Delight users with a seamless experience free from lag or clutter.</p>
+                </div>
+                 <div class="feature-item animated-on-scroll">
+                    <i class="fas fa-feather-alt"></i>
+                    <h3>Clean & Focused</h3>
+                    <p>Your content takes center stage. Minimal branding ensures the spotlight remains on what matters most.</p>
+                </div>
+                <div class="feature-item animated-on-scroll">
+                    <i class="fas fa-sync-alt"></i>
+                    <h3>Intelligent Collaboration</h3>
+                    <p>Leverage AI-assisted design combined with personal consultation for a uniquely efficient creation process.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantage Section (AI Explanation) -->
+    <section id="advantage">
+        <div class="container animated-section">
+             <i class="fas fa-magic icon-advantage"></i>
+             <h2>The Magic Behind the Page</h2>
+             <p>How do we combine bespoke quality with surprising efficiency? We utilize advanced AI to accelerate design and development, translating complex ideas into polished reality faster than ever. This innovation means premium results without the premium timeline or cost.</p>
+        </div>
+    </section>
+
+    <!-- Process Section -->
+    <section id="process">
+        <div class="container">
+             <h2 class="animated-on-scroll">Simple Path to Custom</h2>
+            <div class="process-steps">
+                <div class="step animated-on-scroll">
+                    <span class="step-number">Step 1</span>
+                    <h3>Connect</h3>
+                    <p>Initiate the process by reaching out with your ideas.</p>
+                </div>
+                <div class="step animated-on-scroll">
+                    <span class="step-number">Step 2</span>
+                    <h3>Collaborate</h3>
+                    <p>Define the vision, style, and features for your page.</p>
+                </div>
+                <div class="step animated-on-scroll">
+                    <span class="step-number">Step 3</span>
+                    <h3>Create</h3>
+                    <p>Watch as we build your page with AI-powered precision.</p>
+                </div>
+                 <div class="step animated-on-scroll">
+                    <span class="step-number">Step 4</span>
+                    <h3>Launch</h3>
+                    <p>Deploy your optimized, high-performance bio page.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+     <!-- Showcase Section -->
+    <section id="showcase">
+        <div class="container">
+             <h2 class="animated-on-scroll">Explore the Possibilities</h2>
+             <p class="animated-on-scroll">Inspiration for your unique bio page. See the level of craft and detail achievable.</p>
+             <div class="showcase-grid">
+                <div class="showcase-item animated-on-scroll">
+                    <img src="/api/placeholder/400/280" alt="Example Bio Page 1 Placeholder">
+                </div>
+                <div class="showcase-item animated-on-scroll">
+                     <img src="/api/placeholder/400/280" alt="Example Bio Page 2 Placeholder">
+                </div>
+             </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section (NEW) -->
+    <section id="pricing">
+        <div class="container">
+            <h2 class="animated-on-scroll">Simple & Transparent Pricing</h2>
+            <p class="animated-on-scroll">Choose the plan that fits your needs. Start for free or go Pro for the full experience.</p>
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="plan-card animated-on-scroll">
+                    <h3>Starter</h3>
+                    <div class="price">$0</div>
+                    <p class="tagline">Perfect for getting started with a custom, high-performance page.</p>
+                    <ul class="features">
+                        <li><i class="fas fa-check"></i>Fully Custom Design</li>
+                        <li><i class="fas fa-check"></i>AI-Powered Creation</li>
+                        <li><i class="fas fa-check"></i>Fast & Responsive</li>
+                        <li><i class="fas fa-check"></i>Core Feature Set</li>
+                        <li><i class="fas fa-check"></i>Hosted on labs.waves.sh URL</li>
+                    </ul>
+                    <a href="#cta" class="btn">Get Started</a>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="plan-card plan-pro animated-on-scroll">
+                    <h3>Pro</h3>
+                    <div class="price">$50<span>/year</span></div>
+                    <p class="tagline">Unlock full potential with unbranded hosting and priority support.</p>
+                    <ul class="features">
+                        <li><i class="fas fa-check"></i>Everything in Starter, plus:</li>
+                        <li><i class="fas fa-check"></i>Remove labs.waves.sh Branding</li>
+                        <li><i class="fas fa-check"></i>Use Your Own Custom Domain</li>
+                        <li><i class="fas fa-check"></i>Priority Support</li>
+                        <li><i class="fas fa-check"></i>Advanced Analytics (Optional Add-on)</li>
+                         <li><i class="fas fa-check"></i>Early Access to New Features</li>
+                    </ul>
+                    <a href="#cta" class="btn">Go Pro</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta">
+        <div class="container animated-section">
+            <h2>Ready for a Smarter Link Page?</h2>
+            <p>Elevate your online presence with a bio page that's as intelligent as it is beautiful. Contact labs.waves.sh to begin your project today.</p>
+            <a href="https://ig.me/m/vincenthopf" target="_blank" rel="noopener noreferrer" class="btn">Start Your Project <i class="fa-solid fa-paper-plane"></i></a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 labs.waves.sh | Intelligently Designed</p>
+        </div>
+    </footer>
+
+</body>
+</html>
